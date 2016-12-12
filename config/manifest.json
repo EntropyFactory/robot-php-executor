@@ -1,0 +1,9 @@
+{
+  "name": "Test Task",
+  "author": {
+    "name": "Lluis Santos",
+    "email": "lluis@robotunion.net"
+  },
+  "description": "testing robot",
+  "main": "RobotUnion\\Example\\MyFirstRobot"
+}
