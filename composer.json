@@ -1,5 +1,5 @@
 {
-  "name": "EntropyFactory/robotunion-php-client",
+  "name": "RobotUnion/robot-php-executor",
   "repositories": [
     {
       "type": "vcs",
