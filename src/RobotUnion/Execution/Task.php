@@ -23,7 +23,7 @@ abstract class Task implements Runnable, Cancelable, HttpDebuggable, HttpExecuta
     public $okNotifier;
     public $koNotifier;
 
-    public function __construct($urlOk, $urlKo, $urlDebug, $urlException)
+    public function initialize($urlOk, $urlKo, $urlDebug, $urlException)
     {
         $this->urlOk = $urlOk;
         $this->urlKo = $urlKo;
