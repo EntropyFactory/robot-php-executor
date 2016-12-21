@@ -34,10 +34,10 @@ class LaunchRobotTest extends PHPUnit_Extensions_AppiumTestCase {
         $baseURL = "https://api-staging.robotunion.net";
         $task = new __task_class__();
         $task->initialize(
-            $baseURL . "/system/v1/executions/" . $executionId,
-            $baseURL . "/system/v1/executions/" . $executionId,
-            $baseURL . "/system/v1/executions/" . $executionId,
-            $baseURL . "/system/v1/executions/" . $executionId
+            $baseURL . "/system/v1/__extype__/" . $executionId,
+            $baseURL . "/system/v1/__extype__/" . $executionId,
+            $baseURL . "/system/v1/__extype__/" . $executionId,
+            $baseURL . "/system/v1/__extype__/" . $executionId
         );
         $task->setDevice($this);
         $task->run();
