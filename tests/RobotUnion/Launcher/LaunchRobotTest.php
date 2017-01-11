@@ -16,14 +16,14 @@ class LaunchRobotTest extends PHPUnit_Extensions_AppiumTestCase {
     public static $browsers = [
         [
             'local' => false,
-            'host' => '5.189.191.163',
-            'port' => 4723,
-            'browserName' => '',
+            'host' => '__host__',
+            'port' => __port__,
+            'browserName' => '__browser_name__',
             'desiredCapabilities' => [
-                'platformName' => 'Android',
-                'deviceName' => 'Google Nexus S',
-                'appPackage' => 'com.android.settings',
-                "appActivity" => ".Settings"
+                'platformName' => '__platform_name__',
+                'deviceName' => '__device_name__',
+                'appPackage' => '__app_package__',
+                "appActivity" => "__app_activity__"
             ]
         ]
     ];
