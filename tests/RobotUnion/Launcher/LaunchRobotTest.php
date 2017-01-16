@@ -40,6 +40,8 @@ class LaunchRobotTest extends PHPUnit_Extensions_AppiumTestCase {
             $baseURL . "/system/v1/__extype__/" . $executionId
         );
         $task->setDevice($this);
+        $task->setRobot(json_decode(base64_decode(getenv('ROBOT'))));
+        $task->setInput(json_decode(base64_decode(getenv('INPUT'))));
         $task->run();
     }
 }

@@ -20,6 +20,8 @@ abstract class Task implements Runnable, Cancelable, HttpDebuggable, HttpExecuta
 
     public $device;
     public $logger;
+    public $input;
+    public $robot;
     public $okNotifier;
     public $koNotifier;
 
@@ -105,6 +107,22 @@ abstract class Task implements Runnable, Cancelable, HttpDebuggable, HttpExecuta
     public function setDevice($device)
     {
         $this->device = $device;
+    }
+
+    /**
+     * @param mixed $input
+     */
+    public function setInput($input)
+    {
+        $this->input = $input;
+    }
+
+    /**
+     * @param mixed $robot
+     */
+    public function setRobot($robot)
+    {
+        $this->robot = $robot;
     }
 
 }
