@@ -49,6 +49,13 @@ class JsonLogger implements Logger {
         $this->notifier->notify($log);
     }
 
+
+    function capture($device, $severity = 7, $channel = ""){
+        $this->debug([
+            "capture" => base64_encode($device->currentScreenshot())
+        ], null, $severity, $channel);
+    }
+
     /**
      * @param $message
      * @param null $data
