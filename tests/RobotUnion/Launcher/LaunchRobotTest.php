@@ -24,7 +24,7 @@ class LaunchRobotTest extends PHPUnit_Extensions_AppiumTestCase {
                 'deviceName' => '__device_name__',
                 'appPackage' => '__app_package__',
                 "appActivity" => "__app_activity__",
-                "nodeIdentifier" => "__node_identifier__"
+                "udid" => "__device_name__"
             ]
         ]
     ];
