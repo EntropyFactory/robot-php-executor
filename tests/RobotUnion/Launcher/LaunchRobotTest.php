@@ -21,6 +21,7 @@ class LaunchRobotTest extends PHPUnit_Extensions_AppiumTestCase {
             'browserName' => '__browser_name__',
             'desiredCapabilities' => [
                 'platformName' => '__platform_name__',
+                'deviceName' => '__device_name__',
                 'appPackage' => '__app_package__',
                 "appActivity" => "__app_activity__",
                 "nodeIdentifier" => "__node_identifier__"
