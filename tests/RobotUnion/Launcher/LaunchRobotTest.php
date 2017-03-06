@@ -19,13 +19,7 @@ class LaunchRobotTest extends PHPUnit_Extensions_AppiumTestCase {
             'host' => '__host__',
             'port' => __port__,
             'browserName' => '__browser_name__',
-            'desiredCapabilities' => [
-                'platformName' => '__platform_name__',
-                'deviceName' => '__device_name__',
-                'appPackage' => '__app_package__',
-                "appActivity" => "__app_activity__",
-                "udid" => "__udid__"
-            ]
+            'desiredCapabilities' => __capabilities__
         ]
     ];
 
