@@ -9,6 +9,7 @@
 namespace Tests\RobotUnion\Launcher;
 
 use PHPUnit_Extensions_AppiumTestCase;
+use RobotUnion\Execution\Task;
 
 
 class LaunchRobotTest extends PHPUnit_Extensions_AppiumTestCase {
@@ -24,19 +25,16 @@ class LaunchRobotTest extends PHPUnit_Extensions_AppiumTestCase {
     ];
 
     public function testExecuteRobot(){
-        $executionId = "__exec_id__";
+        $id = "__exec_id__";
         //$executionId = "4a6ae24d-bfeb-11e6-9ba2-0050563c3ed9";
         $baseURL = "https://api-staging.robotunion.net";
+        /** @var Task $task */
         $task = new __task_class__();
-        $task->initialize(
-            $baseURL . "/system/v1/__extype__/" . $executionId,
-            $baseURL . "/system/v1/__extype__/" . $executionId,
-            $baseURL . "/system/v1/__extype__/" . $executionId,
-            $baseURL . "/system/v1/__extype__/" . $executionId
-        );
+        $task->initialize($baseURL . "/system/v1/__extype__/" . $id);
+        $task->setExecutionId($id);
         $task->setDevice($this);
         $task->setRobot(json_decode(base64_decode(getenv('ROBOT'))));
         $task->setInput(json_decode(base64_decode(getenv('INPUT'))));
-        $task->run();
+        $task->execute();
     }
 }

@@ -11,52 +11,57 @@ namespace RobotUnion\Execution;
 
 abstract class Task implements Runnable, Cancelable, HttpDebuggable, HttpExecutable, Launcher {
 
+    private $execution_id;
 
-    private $exceptionNotifier;
-    private $urlOk;
-    private $urlKo;
-    private $urlDebug;
-    private $urlException;
+    /** @var  Notifier */
+    private $notifier;
 
     public $device;
+    /** @var  Logger */
     public $logger;
     public $input;
+
+    /** @var  Robot */
     public $robot;
-    public $okNotifier;
-    public $koNotifier;
 
-    public function initialize($urlOk, $urlKo, $urlDebug, $urlException)
-    {
-        $this->urlOk = $urlOk;
-        $this->urlKo = $urlKo;
-        $this->urlDebug = $urlDebug;
-        $this->urlException = $urlException;
-
-        $this->okNotifier = new HttpNotifier($urlOk);
-        $this->koNotifier = new HttpNotifier($urlKo);
-        $this->logger = new JsonLogger(new HttpNotifier($urlDebug));
-        $this->exceptionNotifier = new HttpNotifier($urlException);
+    /**
+     * @param $url
+     */
+    public function initialize($url) {
+        $this->logger = new JsonLogger(new HttpNotifier($url));
     }
 
     function cancel() {
-        $this->koNotifier->notify([]);
+        $this->notifier->notify([]);
         die();
     }
 
-    public function testRunRobot(){
-        try {
-            $this->run();
-            $this->okNotifier->notify([]);
-        } catch (\Exception $e){
-            $this->exceptionNotifier->notify($e);
-            $this->koNotifier->notify([]);
-        }
+    function execute(){
+        $output = $this->run();
+        $content = [
+            'status' => 'ending',
+            'output' => $output
+        ];
+        $opts = [
+            'method' => 'PATCH',
+            'header' => 'Content-Type: application/json',
+            'content' => json_encode($content)
+        ];
+
+        return file_get_contents(
+            "https://api-staging.robotunion.net/system/v1/executions/" . $this->getExecutionId(),
+            false,
+            stream_context_create($opts)
+        );
     }
 
-    function launch($taskId, $data)
+    function launchTask($task_id, $input)
     {
         $content = [
-            'task_id' => $taskId
+            'caller_id' => $this->getExecutionId(),
+            'task_id' => $task_id,
+            'input' => $input,
+            'sync' => true
         ];
         $opts = [
             'method' => 'POST',
@@ -66,39 +71,9 @@ abstract class Task implements Runnable, Cancelable, HttpDebuggable, HttpExecuta
 
         $ctx = stream_context_create($opts);
 
-        file_get_contents("https://api-staging.robotunion.net/system/v1/executions", false, $ctx);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUrlOk()
-    {
-        return $this->urlOk;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUrlKo()
-    {
-        return $this->urlKo;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUrlDebug()
-    {
-        return $this->urlDebug;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUrlException()
-    {
-        return $this->urlException;
+        $jsonResp = file_get_contents("https://api-staging.robotunion.net/system/v1/executions", false, $ctx);
+        $execution = json_decode($jsonResp);
+        return $execution->output;
     }
 
     /**
@@ -123,6 +98,19 @@ abstract class Task implements Runnable, Cancelable, HttpDebuggable, HttpExecuta
     public function setRobot($robot)
     {
         $this->robot = $robot;
+    }
+
+    public function getExecutionId()
+    {
+        return $this->execution_id;
+    }
+
+    /**
+     * @param mixed $execution_id
+     */
+    public function setExecutionId($execution_id)
+    {
+        $this->execution_id = $execution_id;
     }
 
 }
