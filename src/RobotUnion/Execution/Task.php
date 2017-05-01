@@ -9,16 +9,18 @@
 namespace RobotUnion\Execution;
 
 
-abstract class Task implements Runnable, Cancelable, HttpDebuggable, HttpExecutable, Launcher {
+abstract class Task implements Runnable, Cancelable, Launcher {
+
+    public $device;
 
     private $execution_id;
 
     /** @var  Notifier */
     private $notifier;
 
-    public $device;
     /** @var  Logger */
     public $logger;
+
     public $input;
 
     /** @var  Robot */

@@ -34,5 +34,4 @@ class MyFirstTask extends Task {
         ]);
         $this->logger->debug("END");
     }
-
 }
