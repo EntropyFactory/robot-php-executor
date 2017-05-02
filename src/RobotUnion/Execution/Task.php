@@ -84,7 +84,7 @@ abstract class Task implements Runnable, Cancelable, Launcher {
                 $content['development_id'] = $this->getExecutionId();
                 break;
             default:
-                throw new \LogicException("Invalid execution type");
+                throw new \LogicException("Invalid execution type " . $this->getExecType());
         }
 
         $opts = [
