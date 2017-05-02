@@ -77,10 +77,10 @@ abstract class Task implements Runnable, Cancelable, Launcher {
         ];
 
         switch($this->getExecType()) {
-            case 'execution':
+            case 'executions':
                 $content['caller_id'] = $this->getExecutionId();
                 break;
-            case 'development':
+            case 'developments':
                 $content['development_id'] = $this->getExecutionId();
                 break;
             default:
