@@ -81,7 +81,7 @@ abstract class Task implements Runnable, Cancelable, Launcher {
         ];
 
         $jsonResp = file_get_contents(
-            $this->getUrl(),
+            "https://api-staging.robotunion.net/system/v1/executions",
             false,
             stream_context_create($opts)
         );
