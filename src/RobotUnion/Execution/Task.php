@@ -12,6 +12,7 @@ namespace RobotUnion\Execution;
 abstract class Task implements Runnable, Cancelable, Launcher {
 
     public $device;
+    private $execType;
 
     private $execution_id;
 
@@ -30,11 +31,14 @@ abstract class Task implements Runnable, Cancelable, Launcher {
 
     /**
      * @param $url
+     * @param $execType
+     * @param $id
      */
-    public function initialize($url, $id) {
+    public function initialize($url, $execType, $id) {
         $this->url = $url;
+        $this->execType = $execType;
         $this->execution_id = $id;
-        $this->logger = new JsonLogger(new HttpNotifier($url . "/" . $id));
+        $this->logger = new JsonLogger(new HttpNotifier($url . "/" . $execType . "/" . $id));
     }
 
     function cancel() {
@@ -58,7 +62,7 @@ abstract class Task implements Runnable, Cancelable, Launcher {
         ];
 
         file_get_contents(
-            $this->getUrl() . "/" . $this->getExecutionId(),
+            $this->getUrl() . "/" . $this->execType . "/" . $this->getExecutionId(),
             false,
             stream_context_create($opts)
         );
@@ -67,11 +71,22 @@ abstract class Task implements Runnable, Cancelable, Launcher {
     function delegate($task_id, $input)
     {
         $content = [
-            'caller_id' => $this->getExecutionId(),
             'task_id' => $task_id,
             'input' => $input,
             'sync' => true
         ];
+
+        switch($this->getExecType()) {
+            case 'execution':
+                $content['caller_id'] = $this->getExecutionId();
+                break;
+            case 'development':
+                $content['development_id'] = $this->getExecutionId();
+                break;
+            default:
+                throw new \LogicException("Invalid execution type");
+        }
+
         $opts = [
             'http' => [
                 'method' => 'POST',
@@ -81,7 +96,7 @@ abstract class Task implements Runnable, Cancelable, Launcher {
         ];
 
         $jsonResp = file_get_contents(
-            "https://api-staging.robotunion.net/system/v1/executions",
+            $this->getUrl() . "/executions",
             false,
             stream_context_create($opts)
         );
@@ -124,5 +139,13 @@ abstract class Task implements Runnable, Cancelable, Launcher {
     public function getUrl()
     {
         return $this->url;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExecType()
+    {
+        return $this->execType;
     }
 }
