@@ -40,17 +40,20 @@ abstract class Task implements Runnable, Cancelable, Launcher {
 
     function execute(){
         $output = $this->run();
+
         $content = [
             'status' => 'ending',
             'output' => $output
         ];
         $opts = [
-            'method' => 'PATCH',
-            'header' => 'Content-Type: application/json',
-            'content' => json_encode($content)
+            'http' => [
+                'method' => 'PATCH',
+                'header' => 'Content-Type: application/json',
+                'content' => json_encode($content)
+            ]
         ];
 
-        return file_get_contents(
+        file_get_contents(
             "https://api-staging.robotunion.net/system/v1/executions/" . $this->getExecutionId(),
             false,
             stream_context_create($opts)
