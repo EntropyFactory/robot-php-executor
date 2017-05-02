@@ -57,7 +57,7 @@ abstract class Task implements Runnable, Cancelable, Launcher {
         );
     }
 
-    function launchTask($task_id, $input)
+    function delegate($task_id, $input)
     {
         $content = [
             'caller_id' => $this->getExecutionId(),

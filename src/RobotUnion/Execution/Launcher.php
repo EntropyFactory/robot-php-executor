@@ -10,5 +10,5 @@ namespace RobotUnion\Execution;
 
 
 interface Launcher {
-    function launchTask($task_id, $input);
+    function delegate($task_id, $input);
 }
