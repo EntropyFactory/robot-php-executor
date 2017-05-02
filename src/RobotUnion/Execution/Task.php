@@ -26,11 +26,15 @@ abstract class Task implements Runnable, Cancelable, Launcher {
     /** @var  Robot */
     public $robot;
 
+    private $url;
+
     /**
      * @param $url
      */
-    public function initialize($url) {
-        $this->logger = new JsonLogger(new HttpNotifier($url));
+    public function initialize($url, $id) {
+        $this->url = $url;
+        $this->execution_id = $id;
+        $this->logger = new JsonLogger(new HttpNotifier($url . "/" . $id));
     }
 
     function cancel() {
@@ -54,7 +58,7 @@ abstract class Task implements Runnable, Cancelable, Launcher {
         ];
 
         file_get_contents(
-            "https://api-staging.robotunion.net/system/v1/executions/" . $this->getExecutionId(),
+            $this->getUrl() . "/" . $this->getExecutionId(),
             false,
             stream_context_create($opts)
         );
@@ -69,14 +73,18 @@ abstract class Task implements Runnable, Cancelable, Launcher {
             'sync' => true
         ];
         $opts = [
-            'method' => 'POST',
-            'header' => 'Content-Type: application/json',
-            'content' => json_encode($content)
+            'http' => [
+                'method' => 'POST',
+                'header' => 'Content-Type: application/json',
+                'content' => json_encode($content)
+            ]
         ];
 
-        $ctx = stream_context_create($opts);
-
-        $jsonResp = file_get_contents("https://api-staging.robotunion.net/system/v1/executions", false, $ctx);
+        $jsonResp = file_get_contents(
+            $this->getUrl(),
+            false,
+            stream_context_create($opts)
+        );
         $execution = json_decode($jsonResp);
         return $execution->output;
     }
@@ -111,11 +119,10 @@ abstract class Task implements Runnable, Cancelable, Launcher {
     }
 
     /**
-     * @param mixed $execution_id
+     * @return mixed
      */
-    public function setExecutionId($execution_id)
+    public function getUrl()
     {
-        $this->execution_id = $execution_id;
+        return $this->url;
     }
-
 }
