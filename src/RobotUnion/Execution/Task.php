@@ -100,8 +100,8 @@ abstract class Task implements Runnable, Cancelable, Launcher {
             false,
             stream_context_create($opts)
         );
-        $execution = json_decode($jsonResp);
-        return $execution->data;
+        $response = json_decode($jsonResp);
+        return $response->data->output;
     }
 
     /**
