@@ -27,7 +27,7 @@ class LaunchRobotTest extends PHPUnit_Extensions_AppiumTestCase {
     public function testExecuteRobot(){
         $id = "__exec_id__";
         //$executionId = "4a6ae24d-bfeb-11e6-9ba2-0050563c3ed9";
-        $baseURL = "https://api-staging.robotunion.net";
+        $baseURL = "https://api.alpha.rallf.com";
         /** @var Task $task */
         $task = new __task_class__();
         $task->initialize($baseURL . "/system/v1", "__extype__", $id);
